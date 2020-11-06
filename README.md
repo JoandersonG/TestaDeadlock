@@ -8,7 +8,7 @@ de coreografia BPMN mapeados em pi-ADL.
 
 ###Features
 - [X] Copia os arquivos dentro de scheduler     
-- [ ] Executa o compilador - arquivo compile
+- [x] Executa o compilador - arquivo compile
 - [ ] Executa o modelo gerado internamente em busca da mensagem de deadlock
 - [ ] Retorna ao usuário se ocorreu um deadlock e onde
 - [ ] Copia outros arquivos para a pasta
