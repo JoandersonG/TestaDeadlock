@@ -1,5 +1,6 @@
 #include <dirent.h>
 #include <unistd.h>
+#include <sys/wait.h>
 #include "EscreveEmArquivo.c"
 #include "plasmaInterface.c"
 #include "scheduler.c"
@@ -68,15 +69,40 @@ void copyFilesToSchedulerDirectory() {
 
 }
 
+void executaProgramaEmProcessoFilho(char * novoPrograma) {
+
+    //criating a child process
+    pid_t programaExecutarCompileId = fork();
+    if (programaExecutarCompileId < 0) {
+        printf("TestaDeadlock: não foi possível executar o programa %s. Erro: impossível criar um processo filho\n", novoPrograma);
+        exit(EXIT_FAILURE);
+    }
+
+    //executing compile
+    if (programaExecutarCompileId == 0) { //child process
+        int executeResult = 0;
+        void * emptyArg;
+        executeResult = execvp(novoPrograma, emptyArg);
+        if (executeResult < 0) {
+            printf("TestaDeadlock: não foi possível executar o programa %s. Erro: programa não pôde ser executado em processo filho\n", novoPrograma);
+            exit(EXIT_FAILURE);
+        }
+    }
+
+    //waiting for compile execution to finish
+    int status;
+    wait(&status);
+
+}
+
 int main(int argc, char *argv[]){
 
 //  Copia os arquivos dentro de scheduler
     copyFilesToSchedulerDirectory();
 
-
-
-
 //  Executa o compilador - arquivo compile
+    executaProgramaEmProcessoFilho("./compile");
+
 //  Executa o modelo gerado internamente em busca da mensagem de deadlock
 //  Retorna ao usuário se ocorreu um deadlock e onde
 //  Copia outros arquivos para a pasta
