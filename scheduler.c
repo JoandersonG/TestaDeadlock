@@ -69,7 +69,7 @@ char * getSchedulerCode() {
         "\t}\n"
         "}\n"
         "\n"
-        "//resgata o último elemento antes do deadlock que acabou de ocorrer"
+        "//resgata o último elemento antes do deadlock que acabou de ocorrer\n"
         "func GetLastElemBeforeDeadlock() string {\n"
         "\treturn lastElem\n"
         "}\n"
