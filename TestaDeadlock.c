@@ -1,6 +1,7 @@
 #include <dirent.h>
 #include <unistd.h>
 #include <sys/wait.h>
+#include <regex.h>
 #include "EscreveEmArquivo.c"
 #include "plasmaInterface.c"
 #include "scheduler.c"
@@ -63,9 +64,9 @@ void copyFilesToSchedulerDirectory() {
 
     //copy file scheduler.go
     //escreverEmArquivo(arquivoOrigem1,schedulerPath, "TestaDeadlock");
-    escreverEmArquivo(getSchedulerCode(), schedulerPath, "TestaDeadlock");
+    escreverEmArquivo(getSchedulerCodeNoPrintInTerminal(), schedulerPath, "TestaDeadlock");
     //copy file plasmaInterface.go
-    escreverEmArquivo(getPlasmaInterfaceCode(), plasmaInterfacePath, "TestaDeadlock");
+    escreverEmArquivo(getPlasmaInterfaceCodeNoPrintInTerminal(), plasmaInterfacePath, "TestaDeadlock");
 
 }
 
@@ -95,6 +96,58 @@ void executaProgramaEmProcessoFilho(char * novoPrograma) {
 
 }
 
+char * recuperaNomeDoPrograma() {
+
+    //get current directory path
+    char currentDirectoryPath[200];
+    getcwd(currentDirectoryPath, 200);
+
+    //open current directory
+    DIR *currentDirectory = opendir(currentDirectoryPath);
+    if(currentDirectory == NULL) {
+        printf("TestaDeadlock: não foi possível abrir o diretório %s.\n", currentDirectoryPath);
+        exit(EXIT_FAILURE);
+    }
+
+    //find <program_name>.go
+    struct dirent *sd;
+    while((sd = readdir(currentDirectory)) != NULL) {
+        if(sd == NULL) {
+            if(errno == EBADF) {
+                printf("TestaDeadlock: não foi possível ler o diretório %s.\n", currentDirectoryPath);
+            }
+            closedir(currentDirectory);
+            exit(EXIT_FAILURE);
+        }
+        //get a regex for finding file .go
+        regex_t reg;
+        if (regcomp(&reg , ".*\.go", REG_EXTENDED|REG_NOSUB) != 0) {
+            fprintf(stderr,"Erro interno [1]\n");
+            exit(EXIT_FAILURE);
+        }
+        if ((regexec(&reg, sd->d_name, 0, (regmatch_t *) NULL, 0)) == 0) {
+            //it's not parent directory, so
+            break;
+        }
+    }
+    closedir(currentDirectory);
+    if (sd == NULL) {
+        printf("TestaDeadlock: Não foi possível executar o arquivo .go. Erro: Arquivo não encontrado.");
+        exit(EXIT_FAILURE);
+    }
+
+    //remove .go from file name
+    char * programName = sd->d_name;
+    for (unsigned long i = strlen(programName) - 1; i >= 0 ; i--) {
+        if (programName[i] == '.') {
+            programName[i] = '\0';
+            break;
+        }
+    }
+
+    return programName;
+}
+
 int main(int argc, char *argv[]){
 
 //  Copia os arquivos dentro de scheduler
@@ -104,7 +157,14 @@ int main(int argc, char *argv[]){
     executaProgramaEmProcessoFilho("./compile");
 
 //  Executa o modelo gerado internamente em busca da mensagem de deadlock
-//  Retorna ao usuário se ocorreu um deadlock e onde
+    char * nomeDoPrograma = recuperaNomeDoPrograma();
+
+    char programa[128];
+    strcpy(programa, "./");
+    strcat(programa, nomeDoPrograma);
+    executaProgramaEmProcessoFilho(programa);
+
+
 //  Copia outros arquivos para a pasta
 //  Reexecuta o compilador
 
