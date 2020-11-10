@@ -149,7 +149,6 @@ char * recuperaNomeDoPrograma() {
 }
 
 int main(int argc, char *argv[]){
-
 //  Copia os arquivos dentro de scheduler
     copyFilesToSchedulerDirectory(
             getSchedulerCodeNoPrintInTerminal(),
@@ -157,19 +156,19 @@ int main(int argc, char *argv[]){
             );
 //  Executa o compilador - arquivo compile
     executaProgramaEmProcessoFilho("./compile");
-
 //  Executa o modelo gerado internamente em busca da mensagem de deadlock
     char * nomeDoPrograma = recuperaNomeDoPrograma();
-
     char programa[128];
     strcpy(programa, "./");
     strcat(programa, nomeDoPrograma);
     executaProgramaEmProcessoFilho(programa);
-
-
 //  Copia outros arquivos para a pasta
+    copyFilesToSchedulerDirectory(
+            getSchedulerCode(),
+            getPlasmaInterfaceCode()
+            );
 //  Reexecuta o compilador
-
+    executaProgramaEmProcessoFilho("./compile");
 
 
 
