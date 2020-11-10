@@ -17,15 +17,15 @@ void escreverEmArquivo(char * bufferConteudoOrigem, char* arquivoDestino, char *
     int fdDestino = open(arquivoDestino, O_WRONLY| O_CREAT);
     if (fdDestino == -1) {
         if(errno == EEXIST) {
-            printf("%s: não foi possível criar o arquivo %s. Erro: o arquivo especificado já existe.\n", programaInvocador, arquivoDestino);
+            printf("%s: não foi possível abrir o arquivo %s. Erro: o arquivo especificado já existe.\n", programaInvocador, arquivoDestino);
         } else if (errno == ENOENT) {
-            printf("%s: não foi possível criar o arquivo %s. Erro: Diretório não encontrado.\n", programaInvocador, arquivoDestino);
+            printf("%s: não foi possível abrir o arquivo %s. Erro: Diretório não encontrado.\n", programaInvocador, arquivoDestino);
         } else if (errno == EACCES) {
-            printf("%s: não foi possível criar o arquivo %s. Erro: Acesso negado.\n", programaInvocador, arquivoDestino);
+            printf("%s: não foi possível abrir o arquivo %s. Erro: Acesso negado.\n", programaInvocador, arquivoDestino);
         } else if (errno == EAGAIN) {
-            printf("%s: não foi possível criar o arquivo %s. Tente novamente.\n", programaInvocador, arquivoDestino);
+            printf("%s: não foi possível abrir o arquivo %s. Tente novamente.\n", programaInvocador, arquivoDestino);
         }else {
-            printf("%s: não foi possível criar o arquivo %s. %s.\n", programaInvocador, arquivoDestino, strerror(errno));
+            printf("%s: não foi possível abrir o arquivo %s. %s.\n", programaInvocador, arquivoDestino, strerror(errno));
         }
         exit(EXIT_FAILURE);
     }
