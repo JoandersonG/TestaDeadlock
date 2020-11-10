@@ -4,8 +4,6 @@
 Programa que auxilia na detecção de deadlocks de modelos do diagrama
 de coreografia BPMN mapeados em pi-ADL.
 
-<p style="align:center">TestaDeadlock em construção...</p>
-
 ### Features
 - [X] Copia os arquivos dentro de scheduler     
 - [x] Executa o compilador - arquivo compile
@@ -13,7 +11,6 @@ de coreografia BPMN mapeados em pi-ADL.
 - [x] Retorna ao usuário se ocorreu um deadlock e onde
 - [x] Copia outros arquivos para a pasta
 - [x] Reexecuta o compilador
-
 
 ### Como executar
 No diretório build está o arquivo TestaDeadlock. <br>
