@@ -11,8 +11,8 @@ de coreografia BPMN mapeados em pi-ADL.
 - [x] Executa o compilador - arquivo compile
 - [x] Executa o modelo gerado internamente em busca da mensagem de deadlock
 - [x] Retorna ao usuário se ocorreu um deadlock e onde
-- [ ] Copia outros arquivos para a pasta
-- [ ] Reexecuta o compilador
+- [x] Copia outros arquivos para a pasta
+- [x] Reexecuta o compilador
 
 
 ### Como executar

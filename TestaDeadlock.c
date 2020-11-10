@@ -27,7 +27,7 @@ DIR * openDirectory(char * path) {
     return dirOrigem;
 }
 
-void copyFilesToSchedulerDirectory() {
+void copyFilesToSchedulerDirectory(char * schedulerCode, char * plasmaInterfaceCode) {
 
     //scheduler file path to copy:
     //char * arquivoOrigem1 = "files/scheduler.c";
@@ -64,9 +64,9 @@ void copyFilesToSchedulerDirectory() {
 
     //copy file scheduler.go
     //escreverEmArquivo(arquivoOrigem1,schedulerPath, "TestaDeadlock");
-    escreverEmArquivo(getSchedulerCodeNoPrintInTerminal(), schedulerPath, "TestaDeadlock");
+    escreverEmArquivo(schedulerCode, schedulerPath, "TestaDeadlock");
     //copy file plasmaInterface.go
-    escreverEmArquivo(getPlasmaInterfaceCodeNoPrintInTerminal(), plasmaInterfacePath, "TestaDeadlock");
+    escreverEmArquivo(plasmaInterfaceCode, plasmaInterfacePath, "TestaDeadlock");
 
 }
 
@@ -151,8 +151,10 @@ char * recuperaNomeDoPrograma() {
 int main(int argc, char *argv[]){
 
 //  Copia os arquivos dentro de scheduler
-    copyFilesToSchedulerDirectory();
-
+    copyFilesToSchedulerDirectory(
+            getSchedulerCodeNoPrintInTerminal(),
+            getPlasmaInterfaceCodeNoPrintInTerminal()
+            );
 //  Executa o compilador - arquivo compile
     executaProgramaEmProcessoFilho("./compile");
 
