@@ -8,8 +8,10 @@
 
 void escreverEmArquivo(char * bufferConteudoOrigem, char* arquivoDestino, char * programaInvocador) {
 
-    //abrir arquivo destino:
+    //limpando dados do arquivo de destino
+    fclose(fopen(arquivoDestino, "w"));
 
+    //abrir arquivo destino:
     //flags
     //O_WRONLY: apenas escrever no arquivo
     //O_CREAT: criar se arquivo não existe
